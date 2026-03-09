@@ -46,7 +46,7 @@ const QueryTable = ({ columns, rows }: QueryTableProps) => {
 						{columns.map((col) => (
 							<th
 								key={col}
-								className='border p-2 text-left select-none sticky top-0 bg-primary text-white z-20'>
+								className='border p-2 text-left select-none sticky top-0 bg-primary text-primary-foreground z-20'>
 								<div className='text-lg font-semibold'>
 									{col}
 								</div>

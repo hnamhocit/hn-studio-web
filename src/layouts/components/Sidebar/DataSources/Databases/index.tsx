@@ -14,10 +14,11 @@ import Tables from './Tables'
 
 interface DatabasesProps {
 	dataSourceId: string
+	autoFetch?: boolean
 }
 
-const Databases = ({ dataSourceId }: DatabasesProps) => {
-	const { databases, isLoading } = useDatabases(dataSourceId)
+const Databases = ({ dataSourceId, autoFetch = true }: DatabasesProps) => {
+	const { databases, isLoading } = useDatabases(dataSourceId, { autoFetch })
 	const { database, setDatabase } = useDataSourcesStore()
 
 	if (isLoading) {

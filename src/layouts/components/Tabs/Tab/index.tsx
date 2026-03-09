@@ -1,5 +1,6 @@
 import { clsx } from 'clsx'
 import { XIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { FC } from 'react'
 
 import {
@@ -19,6 +20,7 @@ interface TabProps {
 }
 
 const Tab: FC<TabProps> = (props) => {
+	const router = useRouter()
 	const { tab, index } = props
 	const { id, title } = tab
 	const { tabs, setTabs, setActiveTabId, removeTab } = useTabsStore()
@@ -62,7 +64,10 @@ const Tab: FC<TabProps> = (props) => {
 							'text-primary bg-background shadow-sm before:absolute before:top-0 before:left-0 before:w-full before:h-0.5 before:bg-primary'
 						:	'text-gray-500 bg-gray-50 dark:bg-gray-900/30 hover:bg-gray-100 dark:hover:bg-gray-800/50',
 					)}
-					onClick={() => setActiveTabId(tab.id)}>
+					onClick={() => {
+						setActiveTabId(tab.id)
+						router.push('/')
+					}}>
 					<div className='font-mono font-medium'>{title}</div>
 
 					<button

@@ -42,7 +42,7 @@ const CreateDatabaseDialog = ({ dataSourceId }: CreateDatabaseDialogProps) => {
 		dataSourceId === target?.dataSourceId &&
 		actionType === 'create-database' &&
 		target.database === null
-	const { reload } = useDatabases(dataSourceId)
+	const { reload } = useDatabases(dataSourceId, { autoFetch: false })
 
 	const {
 		register,

@@ -26,6 +26,8 @@ const DataSources = () => {
 		connectionStatuses,
 		updateDataSourceStatus,
 		setBulkConnectionStatuses,
+		dataSourceId,
+		setDataSourceId,
 	} = useDataSourcesStore()
 
 	const { user } = useUserStore()
@@ -79,7 +81,9 @@ const DataSources = () => {
 	return (
 		<Accordion
 			type='single'
-			collapsible>
+			collapsible
+			value={dataSourceId || undefined}
+			onValueChange={(value) => setDataSourceId(value || null)}>
 			{datasources.map((ds) => {
 				const supportDataSource = supportDataSources.find(
 					(s) => s.id === ds.type,
@@ -138,7 +142,10 @@ const DataSources = () => {
 						</DataSourceContextMenu>
 
 						<AccordionContent>
-							<Databases dataSourceId={ds.id} />
+							<Databases
+								dataSourceId={ds.id}
+								autoFetch={dataSourceId === ds.id}
+							/>
 						</AccordionContent>
 					</AccordionItem>
 				)

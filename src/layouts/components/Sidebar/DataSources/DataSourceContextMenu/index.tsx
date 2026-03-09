@@ -32,7 +32,7 @@ interface CustomContextMenuProps {
 }
 
 const CustomContextMenu = ({ ds, children }: CustomContextMenuProps) => {
-	const { reload } = useDatabases(ds.id)
+	const { reload } = useDatabases(ds.id, { autoFetch: false })
 
 	const { isSubmitting, target, openAction, closeAction, actionType } =
 		useContextMenuStore()

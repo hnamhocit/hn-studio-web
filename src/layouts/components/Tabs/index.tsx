@@ -1,10 +1,13 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
+
 import { ITab } from '@/interfaces'
 import { useDataSourcesStore, useTabsStore } from '@/stores'
 import Tab from './Tab'
 
 const Tabs = () => {
+	const router = useRouter()
 	const { tabs, setTabs, setActiveTabId, commitContent } = useTabsStore()
 	const { dataSourceId, database, table } = useDataSourcesStore()
 
@@ -22,6 +25,7 @@ const Tabs = () => {
 
 		setTabs([...tabs, newTab])
 		setActiveTabId(id)
+		router.push('/')
 	}
 
 	return (

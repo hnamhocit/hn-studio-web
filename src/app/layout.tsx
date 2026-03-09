@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { ReactNode } from 'react'
 import { Toaster } from 'sonner'
 
+import BetaAnnouncementModal from '@/components/BetaAnnouncementModal'
 import Providers from '@/components/Providers'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import DefaultLayout from '@/layouts/DefaultLayout'
@@ -36,6 +37,7 @@ export default function RootLayout({
 				<Providers>
 					<TooltipProvider>
 						<DefaultLayout>{children}</DefaultLayout>
+						<BetaAnnouncementModal />
 					</TooltipProvider>
 				</Providers>
 				<Toaster />

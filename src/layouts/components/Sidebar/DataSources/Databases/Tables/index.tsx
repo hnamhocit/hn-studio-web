@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 import { CornerDownLeftIcon, Table2Icon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 // Xoá import AccordionContent ở đây đi
 import { useSchema } from '@/hooks'
@@ -12,6 +13,7 @@ interface TablesProps {
 }
 
 const Tables = ({ dataSourceId, database }: TablesProps) => {
+	const router = useRouter()
 	const {
 		setTable,
 		table: activeTable,
@@ -38,6 +40,7 @@ const Tables = ({ dataSourceId, database }: TablesProps) => {
 
 		setActiveTabId(id)
 		setTable(tableName)
+		router.push('/')
 
 		if (!tabs.find((tab) => tab.id === id)) {
 			setTabs([...tabs, newTab])
