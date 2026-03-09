@@ -6,12 +6,12 @@ import {
 } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import clsx from 'clsx'
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 
-import { useScrollEnd } from '@/hooks'
+import { useActiveTablePath, useScrollEnd } from '@/hooks'
 import { IColumn } from '@/interfaces'
 import { useDataEditorStore } from '@/stores'
-import { getTablePath, getTypeInfo } from '@/utils'
+import { getTypeInfo } from '@/utils'
 import CellWrapper from './CellWrapper'
 import SelectionCell from './SelectionCell'
 
@@ -19,9 +19,9 @@ interface DatabaseTableProps {
 	columns: IColumn[]
 	initialData: Record<string, unknown>[]
 	primaryColumnName: string
-	hasMore?: boolean
-	isLoadingMore?: boolean
-	onLoadMore?: () => void
+	hasMore: boolean
+	isLoadingMore: boolean
+	onLoadMore: () => void
 }
 
 const DatabaseTable = ({
@@ -35,8 +35,16 @@ const DatabaseTable = ({
 	const parentRef = useRef<HTMLDivElement>(null)
 
 	const { tablesState } = useDataEditorStore()
-	const tablePath = getTablePath()
+	const tablePath = useActiveTablePath()
 	const tableState = tablesState[tablePath]
+
+	const selectedRows = useDataEditorStore(
+		(state) => state.tablesState[tablePath]?.selectedRows,
+	)
+
+	useEffect(() => {
+		console.log('selectedRows changed:', selectedRows)
+	}, [selectedRows])
 
 	const displayData = useMemo(() => {
 		if (!tableState) return initialData
@@ -117,18 +125,21 @@ const DatabaseTable = ({
 							row.original[primaryColumnName],
 					)
 
+					const isDeleted = !!tableState?.deleteChangeset?.[rowId]
+
 					return (
 						<SelectionCell
 							rowId={rowId}
 							index={row.index}
 							tablePath={tablePath}
+							isDeleted={isDeleted}
 						/>
 					)
 				},
 			},
 			...dataCols,
 		]
-	}, [columns, primaryColumnName, tablePath])
+	}, [columns, primaryColumnName, tablePath, tableState?.deleteChangeset])
 
 	const table = useReactTable({
 		data: displayData,

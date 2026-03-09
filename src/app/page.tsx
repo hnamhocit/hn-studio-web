@@ -13,8 +13,7 @@ export default function Home() {
 				No active tab. Click &quot;New&quot; to create a query tab.
 			</div>
 		: activeTab.type === 'query' ? <QueryBuilder />
-		: activeTab.type === 'detail' ? <TableDetail />
-		: activeTab.type === 'sql-file' ? <QueryBuilder />
+		: activeTab.type === 'table' ? <TableDetail />
 		: <div>Unknown tab type</div>
 	)
 }

@@ -25,16 +25,10 @@ export const getSafeDisplayValue = (val: unknown, dataType: string) => {
 			:	'false'
 	}
 
-	// -----------------------------------------------------------------
-	// FIX LỖI DATE / TIMESTAMP: Format lại chuẩn SQL để tránh lỗi Syntax
-	// -----------------------------------------------------------------
 	if (typeLower === 'date') {
-		// Cắt bỏ phần T và time. VD: 2023-01-14T... -> 2023-01-14
 		return strVal.split('T')[0]
 	}
 	if (typeLower.includes('timestamp') || typeLower.includes('datetime')) {
-		// Đổi T thành dấu cách, bỏ phần mili-giây .000 (nếu có)
-		// VD: 2023-01-14T17:00:00.000Z -> 2023-01-14 17:00:00Z
 		return strVal.replace('T', ' ').replace(/\.\d+/, '')
 	}
 

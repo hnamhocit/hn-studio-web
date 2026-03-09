@@ -52,8 +52,6 @@ const QueryBuilder = () => {
 	const toggleIsOpen = () => setIsOpen((prev) => !prev)
 
 	const handleRunQuery = async (forced: boolean = false) => {
-		setIsLoading(true)
-
 		if (!activeTab) {
 			return
 		}
@@ -64,6 +62,8 @@ const QueryBuilder = () => {
 			})
 			return
 		}
+
+		setIsLoading(true)
 
 		try {
 			const query = contentById[activeTab.id]

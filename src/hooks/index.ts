@@ -1,4 +1,5 @@
 export * from './useActiveTab'
+export * from './useActiveTablePath'
 export * from './useDatabases'
 export * from './useRelationships'
 export * from './useSchema'

@@ -3,10 +3,10 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
-import { useActiveTab } from '@/hooks'
+import { useActiveTab, useActiveTablePath } from '@/hooks'
 import { dataSourcesService } from '@/services'
 import { useDataEditorStore, useDataSourcesStore } from '@/stores'
-import { generateSqlStatements, getTablePath, notifyError } from '@/utils'
+import { generateSqlStatements, notifyError } from '@/utils'
 import DeleteButton from './DeleteButton'
 import RefreshButton from './RefreshButton'
 import SettingsButton from './SettingsButton'
@@ -29,7 +29,7 @@ const Actions = ({ refreshData, primaryColumnName }: ActionsProps) => {
 		markSelectedRowsAsDeleted,
 	} = useDataEditorStore()
 
-	const tablePath = getTablePath()
+	const tablePath = useActiveTablePath()
 	const tableState = tablesState[tablePath]
 
 	const canSave =
@@ -45,7 +45,7 @@ const Actions = ({ refreshData, primaryColumnName }: ActionsProps) => {
 	const handleSave = async () => {
 		if (!tableState || !activeTab) return
 
-		const sqlQueries = generateSqlStatements(primaryColumnName)
+		const sqlQueries = generateSqlStatements(primaryColumnName, tablePath)
 		if (sqlQueries.length === 0) return
 
 		setIsSaving(true)

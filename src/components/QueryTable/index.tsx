@@ -1,5 +1,4 @@
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { CircleIcon } from 'lucide-react'
 import { useRef } from 'react'
 
 import Row from './Row'
@@ -40,8 +39,8 @@ const QueryTable = ({ columns, rows }: QueryTableProps) => {
 			<table className='w-full border-collapse whitespace-nowrap'>
 				<thead>
 					<tr>
-						<th className='border p-2 sticky top-0 bg-primary z-20'>
-							<CircleIcon className='text-white mx-auto' />
+						<th className='border p-2 sticky top-0 bg-primary z-20 text-primary-foreground'>
+							#
 						</th>
 
 						{columns.map((col) => (

@@ -14,15 +14,14 @@ import {
 	DialogTitle,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
+import { id } from '@/helpers'
 import { useDatabases } from '@/hooks'
 import { dataSourcesService } from '@/services'
 import { useContextMenuStore } from '@/stores'
-import { notifyError } from '@/utils'
-// TODO: Import service thực tế
-// import { databaseService } from '@/services'
+import { notifyError, renderToken, resolveQueryByDialect } from '@/utils'
 
 interface CreateDatabaseDialogProps {
-	id: string
+	dataSourceId: string
 }
 
 const formSchema = z.object({
@@ -37,13 +36,13 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>
 
-const CreateDatabaseDialog = ({ id }: CreateDatabaseDialogProps) => {
+const CreateDatabaseDialog = ({ dataSourceId }: CreateDatabaseDialogProps) => {
 	const { actionType, target, closeAction } = useContextMenuStore()
 	const isOpen =
-		id === target?.dataSourceId &&
+		dataSourceId === target?.dataSourceId &&
 		actionType === 'create-database' &&
 		target.database === null
-	const { reload } = useDatabases(id)
+	const { reload } = useDatabases(dataSourceId)
 
 	const {
 		register,
@@ -55,13 +54,45 @@ const CreateDatabaseDialog = ({ id }: CreateDatabaseDialogProps) => {
 	})
 
 	const onSubmit = async (data: FormData) => {
-		try {
-			await dataSourcesService.runQuery(
-				id,
-				null,
-				`CREATE DATABASE ${data.databaseName}`,
-				true,
+		const isValidDatabaseName = (name: string) =>
+			/^[A-Za-z0-9_]+$/.test(name)
+
+		if (!isValidDatabaseName(data.databaseName)) {
+			toast.error(
+				'Invalid database name. Only letters, numbers, and underscores are allowed.',
+				{
+					position: 'top-center',
+				},
 			)
+			return
+		}
+
+		try {
+			const sql = resolveQueryByDialect(
+				dataSourceId,
+				{
+					postgresql: ({ databaseName }, dialect) =>
+						`CREATE DATABASE ${renderToken(databaseName, dialect)}`,
+					mysql: ({ databaseName }, dialect) =>
+						`CREATE DATABASE ${renderToken(databaseName, dialect)}`,
+					'maria-db': ({ databaseName }, dialect) =>
+						`CREATE DATABASE ${renderToken(databaseName, dialect)}`,
+					'sql-server': ({ databaseName }, dialect) =>
+						`CREATE DATABASE ${renderToken(databaseName, dialect)}`,
+				},
+				{
+					databaseName: id(data.databaseName),
+				},
+			)
+
+			if (!sql) {
+				toast.error(
+					'Creating databases is not supported for this data source type.',
+				)
+				return
+			}
+
+			await dataSourcesService.runQuery(dataSourceId, null, sql, true)
 
 			toast.success('Created successfully')
 

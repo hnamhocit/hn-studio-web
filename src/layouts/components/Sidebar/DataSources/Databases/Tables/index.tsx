@@ -29,7 +29,7 @@ const Tables = ({ dataSourceId, database }: TablesProps) => {
 		const id = `${dataSourceId}-${database}-${tableName}`
 		const newTab: ITab = {
 			id,
-			type: 'detail',
+			type: 'table',
 			title: tableName,
 			dataSourceId,
 			database,

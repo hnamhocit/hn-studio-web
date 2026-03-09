@@ -1,5 +1,4 @@
 import { useDataEditorStore, useTabsStore } from '@/stores'
-import { getTablePath } from './getTablePath'
 
 const escapeIdentifier = (identifier: string) => {
 	return `"${identifier.replace(/"/g, '""')}"`
@@ -31,7 +30,10 @@ const formatSqlValue = (val: unknown) => {
 	return `'${String(val).replace(/'/g, "''")}'`
 }
 
-export const generateSqlStatements = (primaryColumnName: string) => {
+export const generateSqlStatements = (
+	primaryColumnName: string,
+	tablePath: string,
+) => {
 	const statements: string[] = []
 
 	const { tabs, activeTabId } = useTabsStore.getState()
@@ -41,7 +43,6 @@ export const generateSqlStatements = (primaryColumnName: string) => {
 
 	const { tablesState } = useDataEditorStore.getState()
 
-	const tablePath = getTablePath()
 	const tableState = tablesState[tablePath]
 	if (!tableState) return statements
 

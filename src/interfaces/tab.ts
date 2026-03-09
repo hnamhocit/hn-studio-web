@@ -1,4 +1,4 @@
-export type TabType = 'query' | 'detail' | 'sql-file'
+export type TabType = 'query' | 'table'
 
 export interface ITab {
 	id: string

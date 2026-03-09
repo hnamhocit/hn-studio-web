@@ -4,19 +4,13 @@ import { CheckCircle2Icon } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import DatabaseTable from '@/components/DatabaseTable'
-import { useActiveTab, useSchema } from '@/hooks'
+import { useActiveTab, useActiveTablePath, useSchema } from '@/hooks'
 import { IQueryResult } from '@/interfaces'
 import { databaseService } from '@/services'
 import { useDataEditorStore } from '@/stores'
 import { notifyError } from '@/utils'
 import Actions from './Actions'
 import QueryResultFooter from './QueryResultFooter'
-
-const buildTablePath = (
-	dataSourceId: string,
-	database: string,
-	table: string,
-) => `${dataSourceId}/${database}/${table}`
 
 const Data = () => {
 	const [resultMeta, setResultMeta] = useState<IQueryResult | null>(null)
@@ -48,10 +42,7 @@ const Data = () => {
 	const primaryColumnName =
 		columns.find((col) => col.is_primary)?.column_name || 'id'
 
-	const tablePath = useMemo(() => {
-		if (!canLoad) return ''
-		return buildTablePath(dataSourceId, database, table)
-	}, [canLoad, dataSourceId, database, table])
+	const tablePath = useActiveTablePath()
 
 	useEffect(() => {
 		rowsRef.current = rows

@@ -46,10 +46,15 @@ export const useDataEditorStore = create<GlobalDataEditorState>((set) => ({
 	initializeTable: (tablePath, data) =>
 		set(
 			produce((state: GlobalDataEditorState) => {
-				state.tablesState[tablePath] = {
-					...createEmptyChangeset(),
-					originalData: data,
+				if (!state.tablesState[tablePath]) {
+					state.tablesState[tablePath] = {
+						...createEmptyChangeset(),
+						originalData: data,
+					}
+					return
 				}
+
+				state.tablesState[tablePath].originalData = data
 			}),
 		),
 

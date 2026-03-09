@@ -538,24 +538,3 @@ export function getTypeInfo(rawDataType: string): TypeMapping {
 
 	return typeMap[normalized] || typeMap['unknown']
 }
-
-export function getTypeIcon(dataType: string): LucideIcon {
-	return getTypeInfo(dataType).icon
-}
-
-// Hàm Check giờ đây tra cứu với tốc độ O(1), không dùng mảng tốn RAM nữa
-export function isStringType(dataType: string): boolean {
-	return getTypeInfo(dataType).category === 'string'
-}
-
-export function isNumberType(dataType: string): boolean {
-	return getTypeInfo(dataType).category === 'number'
-}
-
-export function isDateType(dataType: string): boolean {
-	return getTypeInfo(dataType).category === 'datetime'
-}
-
-export function isBooleanType(dataType: string): boolean {
-	return getTypeInfo(dataType).category === 'boolean'
-}
