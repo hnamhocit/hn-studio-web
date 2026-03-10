@@ -17,12 +17,14 @@ import SelectionCell from './SelectionCell'
 
 interface DatabaseTableProps {
 	columns: IColumn[]
-	initialData: Record<string, unknown>[]
+	initialData: TableRow[]
 	primaryColumnName: string
 	hasMore: boolean
 	isLoadingMore: boolean
 	onLoadMore: () => void
 }
+
+type TableRow = Record<string, unknown>
 
 const DatabaseTable = ({
 	columns,
@@ -46,18 +48,18 @@ const DatabaseTable = ({
 		console.log('selectedRows changed:', selectedRows)
 	}, [selectedRows])
 
-	const displayData = useMemo(() => {
+	const displayData = useMemo<TableRow[]>(() => {
 		if (!tableState) return initialData
 
 		const { originalData, updateChangeset, insertChangeset, newRowIds } =
 			tableState
 
-		const newRows = newRowIds.map((id) => ({
+		const newRows: TableRow[] = newRowIds.map((id) => ({
 			__tempId: id,
 			...insertChangeset[id],
 		}))
 
-		const mergedOriginal = originalData.map((row) => {
+		const mergedOriginal: TableRow[] = originalData.map((row: TableRow) => {
 			const rowId = String(row[primaryColumnName])
 			return updateChangeset[rowId] ?
 					{ ...row, ...updateChangeset[rowId] }
@@ -67,8 +69,8 @@ const DatabaseTable = ({
 		return [...newRows, ...mergedOriginal]
 	}, [tableState, initialData, primaryColumnName])
 
-	const tableColumns = useMemo<ColumnDef<Record<string, unknown>>[]>(() => {
-		const dataCols = columns.map((col) => {
+	const tableColumns = useMemo<ColumnDef<TableRow>[]>(() => {
+		const dataCols = columns.map<ColumnDef<TableRow>>((col) => {
 			const { icon: Icon, color } = getTypeInfo(col.data_type)
 
 			return {
@@ -141,7 +143,7 @@ const DatabaseTable = ({
 		]
 	}, [columns, primaryColumnName, tablePath, tableState?.deleteChangeset])
 
-	const table = useReactTable({
+	const table = useReactTable<TableRow>({
 		data: displayData,
 		columns: tableColumns,
 		getCoreRowModel: getCoreRowModel(),

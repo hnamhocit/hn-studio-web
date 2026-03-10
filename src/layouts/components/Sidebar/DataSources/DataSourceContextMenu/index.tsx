@@ -137,7 +137,7 @@ const CustomContextMenu = ({ ds, children }: CustomContextMenuProps) => {
 				open={isOpen}
 				onOpenChange={closeAction}
 			/>
-			<CreateDatabaseDialog id={ds.id} />
+			<CreateDatabaseDialog dataSourceId={ds.id} />
 		</>
 	)
 }
