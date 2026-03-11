@@ -6,7 +6,7 @@ import {
 } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import clsx from 'clsx'
-import { useEffect, useMemo, useRef } from 'react'
+import { useMemo, useRef } from 'react'
 
 import { useActiveTablePath, useScrollEnd } from '@/hooks'
 import { IColumn } from '@/interfaces'
@@ -39,14 +39,6 @@ const DatabaseTable = ({
 	const { tablesState } = useDataEditorStore()
 	const tablePath = useActiveTablePath()
 	const tableState = tablesState[tablePath]
-
-	const selectedRows = useDataEditorStore(
-		(state) => state.tablesState[tablePath]?.selectedRows,
-	)
-
-	useEffect(() => {
-		console.log('selectedRows changed:', selectedRows)
-	}, [selectedRows])
 
 	const displayData = useMemo<TableRow[]>(() => {
 		if (!tableState) return initialData
