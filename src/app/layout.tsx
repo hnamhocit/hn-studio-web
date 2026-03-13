@@ -5,6 +5,7 @@ import localFont from 'next/font/local'
 import { ReactNode } from 'react'
 
 import { AppHeader } from '@/components/app-header'
+import { AuthStoreBootstrap } from '@/components/auth-store-bootstrap'
 import { ScrollToTopButton } from '@/components/scroll-to-top-button'
 
 const geistSans = localFont({
@@ -61,6 +62,7 @@ export default function RootLayout({
 			</head>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background text-foreground antialiased`}>
+				<AuthStoreBootstrap />
 				<AppHeader />
 				{children}
 				<ScrollToTopButton />
